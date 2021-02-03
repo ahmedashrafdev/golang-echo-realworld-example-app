@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/db"
 	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
 	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/utils"
 	"github.com/labstack/echo/v4"
@@ -63,6 +64,15 @@ func (h *Handler) Login(c echo.Context) error {
 	if !u.CheckPassword(req.Password) {
 		return c.JSON(http.StatusForbidden, utils.AccessForbidden())
 	}
+
+	s := model.Server{
+		DbUser:     "mcs",
+		DbPassword: "123",
+		DbIP:       "41.38.87.59",
+		DbName:     "stock_main",
+		ServerName: "mohamed",
+	}
+	db.InitDatabase(s)
 	return c.JSON(http.StatusOK, newUserResponse(u))
 }
 

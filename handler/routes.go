@@ -20,4 +20,7 @@ func (h *Handler) Register(v1 *echo.Group) {
 	// server.GET(":id", h.CurrentUser)
 	server.POST("", h.CreateServer)
 
+	cashtry := v1.Group("/cashtry")
+	cashtry.GET("", CashTryAnalysis)
+	cashtry.GET("/stores", CashTryStores)
 }

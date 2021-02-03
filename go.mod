@@ -3,6 +3,7 @@ module github.com/ahmedashrafdev/golang-echo-realworld-example-app
 go 1.12
 
 require (
+	cloud.google.com/go v0.37.4 // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-openapi/spec v0.19.7 // indirect
@@ -10,7 +11,7 @@ require (
 	github.com/go-playground/locales v0.12.1 // indirect
 	github.com/go-playground/universal-translator v0.16.0 // indirect
 	github.com/gosimple/slug v1.5.0
-	github.com/jinzhu/gorm v1.9.8
+	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.3.0
 	github.com/labstack/echo v3.3.10+incompatible // indirect
 	github.com/labstack/echo/v4 v4.1.16
