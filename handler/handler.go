@@ -1,18 +1,15 @@
 package handler
 
 import (
-	"github.com/xesina/golang-echo-realworld-example-app/article"
-	"github.com/xesina/golang-echo-realworld-example-app/user"
+	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/user"
 )
 
 type Handler struct {
-	userStore    user.Store
-	articleStore article.Store
+	userStore user.Store
 }
 
-func NewHandler(us user.Store, as article.Store) *Handler {
+func NewHandler(us user.Store) *Handler {
 	return &Handler{
-		userStore:    us,
-		articleStore: as,
+		userStore: us,
 	}
 }
