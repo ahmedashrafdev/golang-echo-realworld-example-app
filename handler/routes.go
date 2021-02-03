@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/router/middleware"
+	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/utils"
 	"github.com/labstack/echo/v4"
-	"github.com/xesina/golang-echo-realworld-example-app/router/middleware"
-	"github.com/xesina/golang-echo-realworld-example-app/utils"
 )
 
 func (h *Handler) Register(v1 *echo.Group) {
@@ -15,5 +15,9 @@ func (h *Handler) Register(v1 *echo.Group) {
 	user := v1.Group("/user", jwtMiddleware)
 	user.GET("", h.CurrentUser)
 	user.PUT("", h.UpdateUser)
+
+	server := v1.Group("/server", jwtMiddleware)
+	// server.GET(":id", h.CurrentUser)
+	server.POST("", h.CreateServer)
 
 }

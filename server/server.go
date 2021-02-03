@@ -1,12 +1,11 @@
-package article
+package server
 
 import (
-	"github.com/xesina/golang-echo-realworld-example-app/model"
+	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
 )
 
 type Store interface {
-	CreateServer(*model.Server) error
-	UpdateServer(*model.Server, []string) error
-	DeleteServer(*model.Server) error
-	List(offset, limit int) ([]model.Server, int, error)
+	GetByID(uint) (*model.Server, error)
+	Create(*model.Server) error
+	Update(*model.Server) error
 }

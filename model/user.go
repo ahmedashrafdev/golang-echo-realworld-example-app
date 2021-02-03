@@ -9,19 +9,13 @@ import (
 
 type User struct {
 	gorm.Model
-	Email    string   `gorm:"unique_index;not null"`
-	Password string   `gorm:"not null"`
-	Servers  []Server `gorm:"many2many:servers;"`
+	Email    string `gorm:"unique_index;not null"`
+	Server   Server
+	ServerID uint
+	Password string `gorm:"not null"`
 }
 
-type Follow struct {
-	Follower    User
-	FollowerID  uint `gorm:"primary_key" sql:"type:int not null"`
-	Following   User
-	FollowingID uint `gorm:"primary_key" sql:"type:int not null"`
-}
-
-func (u *User) HashPassword(plain string) (string, error) {
+func (u *User) HashUserPassword(plain string) (string, error) {
 	if len(plain) == 0 {
 		return "", errors.New("password should not be empty")
 	}
@@ -32,17 +26,4 @@ func (u *User) HashPassword(plain string) (string, error) {
 func (u *User) CheckPassword(plain string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(plain))
 	return err == nil
-}
-
-// FollowedBy Followings should be pre loaded
-func (u *User) FollowedBy(id uint) bool {
-	if u.Followers == nil {
-		return false
-	}
-	for _, f := range u.Followers {
-		if f.FollowerID == id {
-			return true
-		}
-	}
-	return false
 }

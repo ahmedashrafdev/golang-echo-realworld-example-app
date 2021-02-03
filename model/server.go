@@ -1,33 +1,26 @@
 package model
 
 import (
+	"errors"
+
 	"github.com/jinzhu/gorm"
+	"golang.org/x/crypto/bcrypt"
 )
 
-type Article struct {
+type Server struct {
 	gorm.Model
-	Slug        string `gorm:"unique_index;not null"`
-	Title       string `gorm:"not null"`
-	Description string
-	Body        string
-	Author      User
-	AuthorID    uint
-	Comments    []Comment
-	Favorites   []User `gorm:"many2many:favorites;"`
-	Tags        []Tag  `gorm:"many2many:article_tags;association_autocreate:false"`
+	DbUser     string `gorm:"size:50;not null;unique" json:"db_user"`
+	DbPassword string `gorm:"size:50;not null;unique" json:"db_password"`
+	DbIP       string `gorm:"size:50;not null;unique" json:"db_ip"`
+	DbName     string `gorm:"size:50;not null;unique" json:"db_name"`
+	ServerName string `gorm:"size:50;not null;unique" json:"server_name"`
+	Users      []User
 }
 
-type Comment struct {
-	gorm.Model
-	Article   Article
-	ArticleID uint
-	User      User
-	UserID    uint
-	Body      string
-}
-
-type Tag struct {
-	gorm.Model
-	Tag      string    `gorm:"unique_index"`
-	Articles []Article `gorm:"many2many:article_tags;"`
+func (s *Server) HashServerPassword(plain string) (string, error) {
+	if len(plain) == 0 {
+		return "", errors.New("password should not be empty")
+	}
+	h, err := bcrypt.GenerateFromPassword([]byte(plain), bcrypt.DefaultCost)
+	return string(h), err
 }

@@ -6,7 +6,6 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
-	"github.com/xesina/golang-echo-realworld-example-app/utils"
 )
 
 type (
@@ -19,7 +18,7 @@ type (
 )
 
 var (
-	ErrJWTMissing = echo.NewHTTPError(http.StatusUnauthorized, "missing or malformed jwt")
+	ErrJWTMissing = echo.NewHTTPError(http.StatusUnauthorized, "un authorized")
 	ErrJWTInvalid = echo.NewHTTPError(http.StatusForbidden, "invalid or expired jwt")
 )
 
@@ -29,8 +28,24 @@ func JWT(key interface{}) echo.MiddlewareFunc {
 	return JWTWithConfig(c)
 }
 
+type Error struct {
+	Errors map[string]interface{} `json:"errors"`
+}
+
+func NewError(err error) Error {
+	e := Error{}
+	e.Errors = make(map[string]interface{})
+	switch v := err.(type) {
+	case *echo.HTTPError:
+		e.Errors["body"] = v.Message
+	default:
+		e.Errors["body"] = v.Error()
+	}
+	return e
+}
+
 func JWTWithConfig(config JWTConfig) echo.MiddlewareFunc {
-	extractor := jwtFromHeader("Authorization", "Token")
+	extractor := jwtFromHeader("Authorization", "Bearer")
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			auth, err := extractor(c)
@@ -40,7 +55,7 @@ func JWTWithConfig(config JWTConfig) echo.MiddlewareFunc {
 						return next(c)
 					}
 				}
-				return c.JSON(http.StatusUnauthorized, utils.NewError(err))
+				return c.JSON(http.StatusUnauthorized, NewError(err))
 			}
 			token, err := jwt.Parse(auth, func(token *jwt.Token) (interface{}, error) {
 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -49,14 +64,14 @@ func JWTWithConfig(config JWTConfig) echo.MiddlewareFunc {
 				return config.SigningKey, nil
 			})
 			if err != nil {
-				return c.JSON(http.StatusForbidden, utils.NewError(ErrJWTInvalid))
+				return c.JSON(http.StatusForbidden, NewError(ErrJWTInvalid))
 			}
 			if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 				userID := uint(claims["id"].(float64))
 				c.Set("user", userID)
 				return next(c)
 			}
-			return c.JSON(http.StatusForbidden, utils.NewError(ErrJWTInvalid))
+			return c.JSON(http.StatusForbidden, NewError(ErrJWTInvalid))
 		}
 	}
 }
