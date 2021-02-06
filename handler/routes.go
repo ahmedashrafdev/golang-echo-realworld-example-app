@@ -27,4 +27,7 @@ func (h *Handler) Register(v1 *echo.Group) {
 	cashtry := v1.Group("/cashtry", jwtMiddleware)
 	cashtry.GET("", h.CashTryAnalysis)
 	cashtry.GET("/stores", h.CashTryStores)
+
+	v1.GET("/top", h.GetTopSalesItem, jwtMiddleware)
+	v1.GET("/branches-sales", h.GetBranchesSales, jwtMiddleware)
 }

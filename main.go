@@ -40,5 +40,5 @@ func main() {
 	ss := store.NewServerStore(d)
 	h := handler.NewHandler(us, ss)
 	h.Register(v1)
-	r.Logger.Fatal(r.Start("127.0.0.1:8585"))
+	r.Logger.Fatal(r.Start("192.168.1.40:8585"))
 }
