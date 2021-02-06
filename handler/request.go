@@ -14,6 +14,41 @@ func newUserUpdateRequest() *userUpdateRequest {
 	return new(userUpdateRequest)
 }
 
+type serverUpdateRequest struct {
+	DbUser     string `validate:"required" json:"dbUser"`
+	DbPassword string `validate:"required" json:"DbPassword"`
+	DbIP       string `validate:"required" json:"DbIP"`
+	DbName     string `validate:"required" json:"DbName"`
+	ServerName string `validate:"required" json:"ServerName"`
+}
+
+func newServerUpdateRequest() *serverUpdateRequest {
+	return new(serverUpdateRequest)
+}
+
+func (r *serverUpdateRequest) populate(s *model.Server) {
+	r.DbUser = s.DbUser
+	r.DbPassword = s.DbPassword
+	r.DbIP = s.DbIP
+	r.DbName = s.DbName
+	r.ServerName = s.ServerName
+}
+
+func (r *serverUpdateRequest) bind(c echo.Context, s *model.Server) error {
+	if err := c.Bind(r); err != nil {
+		return err
+	}
+	if err := c.Validate(r); err != nil {
+		return err
+	}
+	r.DbUser = s.DbUser
+	r.DbPassword = s.DbPassword
+	r.DbIP = s.DbIP
+	r.DbName = s.DbName
+	r.ServerName = s.ServerName
+	return nil
+}
+
 func (r *userUpdateRequest) populate(u *model.User) {
 	r.Email = u.Email
 	r.Password = u.Password
@@ -76,11 +111,11 @@ func (r *userLoginRequest) bind(c echo.Context) error {
 }
 
 type ServerRequest struct {
-	DbUser     string `validate:"required" json:"db_user"`
-	DbPassword string `validate:"required" json:"db_password"`
-	DbIP       string `validate:"required" json:"db_ip"`
-	DbName     string `validate:"required" json:"db_name"`
-	ServerName string `validate:"required" json:"server_name"`
+	DbUser     string `validate:"required" json:"dbUser"`
+	DbPassword string `validate:"required" json:"DbPassword"`
+	DbIP       string `validate:"required" json:"DbIP"`
+	DbName     string `validate:"required" json:"DbName"`
+	ServerName string `validate:"required" json:"ServerName"`
 }
 
 func (r *ServerRequest) bind(c echo.Context, s *model.Server) error {
@@ -93,6 +128,7 @@ func (r *ServerRequest) bind(c echo.Context, s *model.Server) error {
 	s.ServerName = r.ServerName
 	s.DbUser = r.DbUser
 	s.DbIP = r.DbIP
+	s.DbName = r.DbName
 	h, err := s.HashServerPassword(r.DbPassword)
 	if err != nil {
 		return err

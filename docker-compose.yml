@@ -1,0 +1,29 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER_ANOTHER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 3306:3306
+  adminer:
+    image: adminer:latest
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    depends_on:
+      - mysql
+    ports:
+      - 8080:8080
+
+  backend:
+    image: nozom-reports:latest
+    depends_on:
+      - mysql
+    environment:
+      WAIT_HOSTS: mysql:3306
+    ports:
+      - 8585:8585

@@ -11,7 +11,7 @@ type User struct {
 	gorm.Model
 	Email    string `gorm:"unique_index;not null"`
 	Server   Server
-	ServerID uint
+	ServerID uint   `gorm:"foreignkey:SeverIdForeign"`
 	Password string `gorm:"not null"`
 }
 

@@ -13,14 +13,18 @@ func (h *Handler) Register(v1 *echo.Group) {
 	guestUsers.POST("/login", h.Login)
 
 	user := v1.Group("/user", jwtMiddleware)
+	user.GET("/list", h.ListUsers)
 	user.GET("", h.CurrentUser)
 	user.PUT("", h.UpdateUser)
+	user.DELETE("/:id", h.DeleteUser)
 
 	server := v1.Group("/server", jwtMiddleware)
-	// server.GET(":id", h.CurrentUser)
 	server.POST("", h.CreateServer)
+	server.GET("/list", h.ListServers)
+	server.DELETE("/:id", h.DeleteServer)
+	server.PUT("/:id", h.UpdateServer)
 
-	cashtry := v1.Group("/cashtry")
-	cashtry.GET("", CashTryAnalysis)
-	cashtry.GET("/stores", CashTryStores)
+	cashtry := v1.Group("/cashtry", jwtMiddleware)
+	cashtry.GET("", h.CashTryAnalysis)
+	cashtry.GET("/stores", h.CashTryStores)
 }

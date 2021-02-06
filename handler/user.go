@@ -2,8 +2,8 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/db"
 	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
 	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/utils"
 	"github.com/labstack/echo/v4"
@@ -62,17 +62,13 @@ func (h *Handler) Login(c echo.Context) error {
 		return c.JSON(http.StatusForbidden, "this email not exist")
 	}
 	if !u.CheckPassword(req.Password) {
-		return c.JSON(http.StatusForbidden, utils.AccessForbidden())
+		return c.JSON(http.StatusForbidden, "this password dose not belong to this email")
 	}
 
-	s := model.Server{
-		DbUser:     "mcs",
-		DbPassword: "123",
-		DbIP:       "41.38.87.59",
-		DbName:     "stock_main",
-		ServerName: "mohamed",
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.NewError(err))
 	}
-	db.InitDatabase(s)
+
 	return c.JSON(http.StatusOK, newUserResponse(u))
 }
 
@@ -136,7 +132,43 @@ func (h *Handler) UpdateUser(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, newUserResponse(u))
 }
+func (h *Handler) ListUsers(c echo.Context) error {
+	var (
+		users []model.User
+		err   error
+		count int
+	)
 
+	users, count, err = h.userStore.ListUsers()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, nil)
+	}
+
+	return c.JSON(http.StatusOK, newUserListResponse(h.userStore, users, count))
+}
+
+func (h *Handler) DeleteUser(c echo.Context) error {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "error parsing id from body")
+
+	}
+	u, err := h.userStore.GetByIDSec(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.NewError(err))
+	}
+
+	if u == nil {
+		return c.JSON(http.StatusNotFound, utils.NotFound())
+	}
+
+	err = h.userStore.DeleteUser(u)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.NewError(err))
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{"result": "ok"})
+}
 func userIDFromToken(c echo.Context) uint {
 	id, ok := c.Get("user").(uint)
 	if !ok {

@@ -8,7 +8,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CashTryAnalysis(c echo.Context) error {
+func (h *Handler) CashTryAnalysis(c echo.Context) error {
+	err := h.userStore.ConnectDb(userIDFromToken(c))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "failed to connect to your server")
+	}
 	db := db.DBConn
 	req := new(model.CashtryReq)
 	if err := c.Bind(req); err != nil {
@@ -26,12 +30,11 @@ func CashTryAnalysis(c echo.Context) error {
 		cashtries = append(cashtries, cashtry)
 	}
 
-	c.Set("Content-Type", "application/json")
-	c.Set("Access-Control-Allow-Origin", "*")
 	return c.JSON(http.StatusOK, cashtries)
 }
 
-func CashTryStores(c echo.Context) error {
+func (h *Handler) CashTryStores(c echo.Context) error {
+	err := h.userStore.ConnectDb(userIDFromToken(c))
 	db := db.DBConn
 	var stores []model.CashtryStores
 	rows, err := db.Raw("EXEC GetStoreName").Rows()
@@ -45,7 +48,5 @@ func CashTryStores(c echo.Context) error {
 		stores = append(stores, store)
 	}
 
-	c.Set("Content-Type", "application/json")
-	c.Set("Access-Control-Allow-Origin", "*")
 	return c.JSON(http.StatusOK, stores)
 }

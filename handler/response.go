@@ -2,15 +2,18 @@ package handler
 
 import (
 	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
+	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/server"
+	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/user"
 	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/utils"
 )
 
 type userResponse struct {
-	Username string  `json:"username"`
-	Email    string  `json:"email"`
-	Bio      *string `json:"bio"`
-	Image    *string `json:"image"`
-	Token    string  `json:"token"`
+	Email string `json:"email"`
+	Token string `json:"token"`
+}
+type userListResponse struct {
+	Users      []*userResponse `json:"users"`
+	UsersCount int             `json:"usersCount"`
 }
 
 func newUserResponse(u *model.User) *userResponse {
@@ -20,12 +23,44 @@ func newUserResponse(u *model.User) *userResponse {
 	return r
 }
 
+func newUserListResponse(us user.Store, users []model.User, count int) *userListResponse {
+	r := new(userListResponse)
+	r.Users = make([]*userResponse, 0)
+	for _, a := range users {
+		ar := new(userResponse)
+		ar.Email = a.Email
+		r.Users = append(r.Users, ar)
+	}
+	r.UsersCount = count
+	return r
+}
+
 type serverResponse struct {
-	DbUser     string `json:"username"`
-	DbPassword string `json:"email"`
-	DbIP       string `json:"bio"`
-	DbName     string `json:"image"`
-	ServerName string `json:"token"`
+	DbUser     string `json:"DbUser"`
+	DbPassword string `json:"DbPassword"`
+	DbIP       string `json:"DbIP"`
+	DbName     string `json:"DbName"`
+	ServerName string `json:"ServerName"`
+}
+type serverListResponse struct {
+	Servers      []*serverResponse `json:"users"`
+	ServersCount int               `json:"usersCount"`
+}
+
+func newServerListResponse(ss server.Store, servers []model.Server, count int) *serverListResponse {
+	r := new(serverListResponse)
+	r.Servers = make([]*serverResponse, 0)
+	for _, a := range servers {
+		sr := new(serverResponse)
+		sr.DbUser = a.DbUser
+		sr.DbPassword = a.DbPassword
+		sr.DbIP = a.DbIP
+		sr.DbName = a.DbName
+		sr.ServerName = a.ServerName
+		r.Servers = append(r.Servers, sr)
+	}
+	r.ServersCount = count
+	return r
 }
 
 func newServerResponse(s *model.Server) *serverResponse {

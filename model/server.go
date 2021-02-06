@@ -9,11 +9,11 @@ import (
 
 type Server struct {
 	gorm.Model
-	DbUser     string `gorm:"size:50;not null;unique" json:"db_user"`
-	DbPassword string `gorm:"size:50;not null;unique" json:"db_password"`
-	DbIP       string `gorm:"size:50;not null;unique" json:"db_ip"`
-	DbName     string `gorm:"size:50;not null;unique" json:"db_name"`
-	ServerName string `gorm:"size:50;not null;unique" json:"server_name"`
+	DbUser     string `gorm:"not null;unique" json:"DbUser"`
+	DbPassword string `gorm:"not null" json:"DbPassword"`
+	DbIP       string `gorm:"not null;unique" json:"DbIP"`
+	DbName     string `gorm:"not null;unique" json:"DbName"`
+	ServerName string `gorm:"not null;unique" json:"ServerName"`
 	Users      []User
 }
 

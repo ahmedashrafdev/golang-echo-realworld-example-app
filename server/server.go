@@ -5,7 +5,9 @@ import (
 )
 
 type Store interface {
-	GetByID(uint) (*model.Server, error)
+	GetByID(uint64) (*model.Server, error)
 	Create(*model.Server) error
+	ListServers() ([]model.Server, int, error)
+	DeleteServer(s *model.Server) error
 	Update(*model.Server) error
 }
