@@ -12,7 +12,7 @@ var (
 	DBConn *gorm.DB
 )
 
-func InitDatabase(server model.Server) {
+func InitDatabase(server model.Server) error {
 	var err error
 	connectionString := fmt.Sprintf("sqlserver://%s:%s@%s:1433?database=%s", server.DbUser, server.DbPassword, server.DbIP, server.DbName)
 	fmt.Println(connectionString)
@@ -20,7 +20,9 @@ func InitDatabase(server model.Server) {
 	DBConn, err = gorm.Open("mssql", connectionString)
 	if err != nil {
 		fmt.Println("Failed to connect to external database")
+		return err
 	}
 	fmt.Println("Connection Opened to External Database")
+	return nil
 
 }

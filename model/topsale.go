@@ -9,7 +9,7 @@ type Topsale struct {
 }
 
 type TopsaleReq struct {
-	StoreCode uint `json:"store"`
-	Year      uint `json:"year"`
-	Month     uint `json:"month"`
+	Store uint `json:"store"`
+	Year  uint `json:"year"`
+	Month uint `json:"month"`
 }

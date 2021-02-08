@@ -65,7 +65,7 @@ func (h *Handler) GetTopSalesItem(c echo.Context) error {
 	fmt.Println(req)
 
 	var topsales []model.Topsale
-	rows, err := db.Raw("EXEC GetTopSalesItem @Year = ?, @Month = ?,@StoreCode = ?;", req.Year, req.Month, req.StoreCode).Rows()
+	rows, err := db.Raw("EXEC GetTopSalesItem @Year = ?, @Month = ?,@StoreCode = ?;", req.Year, req.Month, req.Store).Rows()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
@@ -106,4 +106,33 @@ func (h *Handler) GetBranchesSales(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, branchesSales)
+}
+func (h *Handler) GetMonthlySales(c echo.Context) error {
+	err := h.userStore.ConnectDb(userIDFromToken(c))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "failed to connect to your server")
+	}
+	db := db.DBConn
+	req := new(model.MonthlySalesReq)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+	var monthlySales []model.MonthlySales
+	rows, err := db.Raw("EXEC GetMonthlySales @Year = ?", req.Year).Rows()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "err doing stored procedure")
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var monthlySale model.MonthlySales
+		if err := rows.Scan(&monthlySale.DocMonth, &monthlySale.Totalamount); err != nil {
+			panic(err)
+		}
+		fmt.Printf("is %x", monthlySale.DocMonth)
+		// println(topsale)
+		monthlySales = append(monthlySales, monthlySale)
+	}
+
+	return c.JSON(http.StatusOK, monthlySales)
 }

@@ -74,7 +74,10 @@ func (us *UserStore) ConnectDb(id uint) error {
 	if err != nil {
 		return err
 	}
-	db.InitDatabase(m)
+	err = db.InitDatabase(m)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

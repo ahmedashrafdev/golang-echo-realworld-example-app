@@ -30,4 +30,5 @@ func (h *Handler) Register(v1 *echo.Group) {
 
 	v1.GET("/top", h.GetTopSalesItem, jwtMiddleware)
 	v1.GET("/branches-sales", h.GetBranchesSales, jwtMiddleware)
+	v1.GET("/monthly-sales", h.GetMonthlySales, jwtMiddleware)
 }
