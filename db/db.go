@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/config"
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/seeds"
+	"github.com/ahmedashrafdev/reports/config"
+	"github.com/ahmedashrafdev/reports/model"
+	"github.com/ahmedashrafdev/reports/seeds"
 	"github.com/jinzhu/gorm"
 	_ "gorm.io/driver/mysql"
 )

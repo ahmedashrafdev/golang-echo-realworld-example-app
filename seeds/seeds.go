@@ -1,7 +1,7 @@
 package seeds
 
 import (
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/seed"
+	"github.com/ahmedashrafdev/reports/seed"
 	"github.com/jinzhu/gorm"
 )
 

@@ -1,8 +1,8 @@
 package store
 
 import (
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/db"
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
+	"github.com/ahmedashrafdev/reports/db"
+	"github.com/ahmedashrafdev/reports/model"
 	"github.com/jinzhu/gorm"
 )
 

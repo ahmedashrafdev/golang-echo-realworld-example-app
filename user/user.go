@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
+	"github.com/ahmedashrafdev/reports/model"
 )
 
 type Store interface {

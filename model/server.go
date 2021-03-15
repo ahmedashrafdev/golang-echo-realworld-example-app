@@ -9,7 +9,7 @@ import (
 
 type Server struct {
 	gorm.Model
-	DbUser     string `gorm:"not null;unique" json:"DbUser"`
+	DbUser     string `gorm:"not null;" json:"DbUser"`
 	DbPassword string `gorm:"not null" json:"DbPassword"`
 	DbIP       string `gorm:"not null;unique" json:"DbIP"`
 	DbName     string `gorm:"not null;unique" json:"DbName"`

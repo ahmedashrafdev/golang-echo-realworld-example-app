@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/server"
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/user"
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/utils"
+	"github.com/ahmedashrafdev/reports/model"
+	"github.com/ahmedashrafdev/reports/server"
+	"github.com/ahmedashrafdev/reports/user"
+	"github.com/ahmedashrafdev/reports/utils"
 )
 
 type userResponse struct {

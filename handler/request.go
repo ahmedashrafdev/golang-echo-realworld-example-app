@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
+	"github.com/ahmedashrafdev/reports/model"
 	"github.com/labstack/echo/v4"
 )
 

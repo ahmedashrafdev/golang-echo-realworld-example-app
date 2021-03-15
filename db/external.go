@@ -3,7 +3,7 @@ package db
 import (
 	"fmt"
 
-	"github.com/ahmedashrafdev/golang-echo-realworld-example-app/model"
+	"github.com/ahmedashrafdev/reports/model"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mssql"
 )
